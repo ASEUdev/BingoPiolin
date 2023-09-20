@@ -29,13 +29,12 @@ function crearCeldas() {
         }
     }
 }
-var generados = [];
+let generados = [];
 function generarValor() {
     let min = Math.ceil(1);
     let max = Math.floor(76);
     let letras = ["B", "I", "N", "G", "O"];
     while (true) {
-    console.log(generados);
     let valor = Math.floor(Math.random() * (max - min) + min);
     if (!generados.includes(valor)) {
         let cell = document.getElementById(`n${valor}`);
@@ -63,5 +62,17 @@ function mostrarValor() {
     let texto = document.getElementById("valorGenerado");
     texto.textContent = generarValor();
 }
-
+let interval;
+function autoGen(){
+    if(!interval){
+        interval = setInterval(() => {
+            if(generados.length === 75){
+                clearInterval(interval)
+                interval = null
+            }
+            mostrarValor();
+        },)
+    }
+    
+}
 window.onload = crearCeldas;

@@ -8,18 +8,20 @@
     <h1 style="text-align: center;">B I N G O</h1>
     <div id="generador" class="generador">
         <div class="container">
-            <div class="vlgnd"><h1 id="valorGenerado" ></h1></div>
+            <div class="vlgnd">
+                <h1 id="valorGenerado"></h1>
+            </div>
             <div class="shadow"></div>
         </div>
         <!-- <div class="btns">
             <button id="activarGenerador" onclick="mostrarValor()">Gen</button>
             <button id="gen" onclick="autoGen()">AutoGen</button>
         </div> -->
-
+    <button onclick="cancelGen(); resetBingo()">reiniciar</button>
     <nav>
         <ul class="nav">
             <li>
-            <a href="#" id="activarGenerador" onclick="mostrarValor()">
+            <a href="#" id="activarGenerador" onclick="mostrarValor(), cancelGen()">
                 <span class="icon-plus-circle" ></span>
                 <span class="screen-reader-text" >Home</span>
             </a>

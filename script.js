@@ -36,17 +36,21 @@ function generarValor() {
     let min = Math.ceil(1);
     let max = Math.floor(76);
     let letras = ["B", "I", "N", "G", "O"];
+
     while (true) {
+        console.log(mostrables);
         let valor = Math.floor(Math.random() * (max - min) + min);
+
         if (!generados.includes(valor)) {
             let cell = document.getElementById(`n${valor}`);
-            cell.style.backgroundColor = "green";
+            cell.style.backgroundColor = "yellow";
+            cell.style.color = "black";
             generados.push(valor);
             if (mostrables.length >= 5) {
                 mostrables.shift();
             }
-            mostrables.push(designarLetra(letras, valor));
-            return designarLetra(letras, valor);
+            mostrables.push(setFormato(valor, letras));
+            return setFormato(valor, letras);
         }
         if (generados.length === 75) {
             alert("Ya se han jugado todos los numeros");
@@ -54,7 +58,8 @@ function generarValor() {
         }
     }
 }
-function designarLetra(letras, valor) {
+
+function setFormato(valor, letras) {
     if (valor < 16) {
         return `${letras[0]}${valor}`;
     } else if (valor >= 16 && valor <= 30) {
@@ -67,10 +72,14 @@ function designarLetra(letras, valor) {
         return `${letras[4]}${valor}`;
     }
 }
+// funcion para mostrar los valores =============================================================================================================================
 function mostrarValor() {
     let texto = document.getElementById("valorGenerado");
     texto.textContent = generarValor();
+    valores();
 }
+// funcion para mostrar los valores =============================================================================================================================
+
 let interval;
 function autoGen() {
     if (!interval) {
@@ -80,22 +89,84 @@ function autoGen() {
                 interval = null;
             }
             mostrarValor();
-        }, 1000);
+        }, 2000);
     }
 }
-function cancelGen() {
+function stopGen() {
     clearInterval(interval);
     interval = null;
-    value = false;
 }
-function resetBingo(){
-    for(let x = 0; x < generados.length; x++){
+function confirmReset() {
+    Swal.fire({
+        title: "Estas seguro?",
+        text: "No podras revertir esta accion!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, Reinicialo!",
+        cancelButtonText: "Cancelar",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            reset();
+            Swal.fire(
+                "Reiniciado!",
+                "Tu juego ha sido reiniciado!.",
+                "success"
+            );
+        }
+    });
+}
+function reset() {
+    for (let x = 0; x < generados.length; x++) {
         let cell = document.getElementById(`n${generados[x]}`);
         cell.style.backgroundColor = "transparent";
+        cell.style.color = "rgb(252, 247, 189)";
     }
     let valor = document.getElementById("valorGenerado");
-    valor.textContent = "";
+    let mostrable = document.getElementById("mostrar");
+    mostrable.innerHTML = null;
+    valor.textContent = null;
     generados = [];
     mostrables = [];
 }
-window.onload = crearCeldas;
+function valores() {
+    let mostrable = document.getElementById("mostrar");
+    mostrable.innerHTML = null;
+    for (let x = 0; x < mostrables.length; x++) {
+        let div = document.createElement("div");
+        div.textContent = mostrables[x];
+        mostrable.appendChild(div);
+    }
+}
+function targetCells() {
+    let div = document.getElementById("patron");
+    div.innerHTML = null;
+    for (let i = 0; i < 5; i++) {
+        let row = document.createElement("tr");
+        for (let j = 0; j < 5; j++) {
+            let cell = document.createElement("td");
+            cell.style.width = "40px";
+            cell.style.height = "40px";
+            cell.style.backgroundColor = "yellow";
+            cell.onclick = cambiarColor.bind(null, cell);
+            cell.onmouseover = function () {
+                this.style.cursor = "pointer";
+                this.style.transition = "background-color 0.3s";
+            };
+            row.appendChild(cell);
+        }
+        div.appendChild(row);
+    }
+}
+function cambiarColor(celda) {
+    if (celda.style.backgroundColor === "green") {
+        celda.style.backgroundColor = "yellow";
+    } else {
+        celda.style.backgroundColor = "green";
+    }
+}
+
+window.onload = () => {
+    crearCeldas(), targetCells();
+};

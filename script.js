@@ -146,6 +146,7 @@ function targetCells() {
         let row = document.createElement("tr");
         for (let j = 0; j < 5; j++) {
             let cell = document.createElement("td");
+            cell.id = `c${i}${j}`
             cell.style.width = "40px";
             cell.style.height = "40px";
             cell.style.backgroundColor = "yellow";
@@ -164,6 +165,14 @@ function cambiarColor(celda) {
         celda.style.backgroundColor = "yellow";
     } else {
         celda.style.backgroundColor = "green";
+    }
+}
+function clearCells(){
+    for (let i = 0; i < 5; i++){
+        for(let j = 0; j < 5; j++){
+            cell = document.getElementById(`c${i}${j}`);
+            cell.style.backgroundColor = "yellow";
+        }
     }
 }
 
